@@ -51,25 +51,27 @@ const createProduct = asyncHandler(async (req, res) => {
 //@access private/admin
 
 const updateProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, image, brand, category, countInStock } = req.body
-    const product = await Product.findById(req.params.id)
+    const { name, price, description, image, brand, category, countInStock } =
+      req.body;
+  
+    const product = await Product.findById(req.params.id);
+  
     if (product) {
-        product.name = name,
-            product.price = price,
-            product.image = image,
-            product.brand = brand,
-            product.description = description,
-            product.category = category,
-            product.countInStock = countInStock
-
-        const updatedProduct = await product.save()
-        res.json(updatedProduct)
+      product.name = name;
+      product.price = price;
+      product.description = description;
+      product.image = image;
+      product.brand = brand;
+      product.category = category;
+      product.countInStock = countInStock;
+  
+      const updatedProduct = await product.save();
+      res.json(updatedProduct);
     } else {
-        res.status(404)
-        throw new Error("Resource not found")
+      res.status(404);
+      throw new Error('Product not found');
     }
-
-})
+  });
 
 const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
