@@ -3,36 +3,41 @@ import { Row, Col, Spinner } from "react-bootstrap"
 import Product from '../components/Product'
 import { useGetProductsQuery } from '../slices/productsApiSlice'
 import Message from '../components/Message'
+import { Link, useParams } from 'react-router-dom'
+import Paginate from '../components/Paginate'
+import Loader from '../components/Loader'
+import ProductCarousal from '../components/ProductCarousal'
+import Meta from '../components/Meta'
+
 
 const HomeScreen = () => {
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         const { data } = await axios.get("/api/products")
-    //         setProducts(data)
-    //     }
-    //     fetchProducts()
-    // }, [])
 
-    const { data: products, isLoading, error } = useGetProductsQuery()
-
-
+    const { pageNumber, keyword } = useParams()
+    const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber })
 
     return (
         <div>
-            {isLoading ? (<Spinner/>) : error ? (
-               <Message variant="danger">
-                {error?.data?.message || error?.error}
+            {!keyword ? <ProductCarousal /> : (<Link to="/" className='btn btn-light mb-4'>Go Back
+            </Link>)}
+            {isLoading ? (<Loader />) : error ? (
+                <Message variant="danger">
+                    {error?.data?.message || error?.error}
                 </Message>
             ) : (
-                <>
+                <><Meta />
                     <h1>Latest Products</h1>
                     <Row>
-                        {products.map((product) => (
+                        {data.products.map((product) => (
                             <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                                 <Product product={product} />
                             </Col>
                         ))}
                     </Row>
+                    <Paginate
+                        pages={data.pages}
+                        page={data.page}
+                        keyword={keyword ? keyword : ''}
+                    />
                 </>
             )}
 

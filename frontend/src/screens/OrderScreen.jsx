@@ -44,7 +44,7 @@ const OrderScreen = () => {
     function onApprove(data, actions) {
         return actions.order.capture().then(async function (details) {
             try {
-                await payOrder({ orderId, details })
+                await payOrder({ orderId, details }).unwrap()
                 refetch()
                 toast.success("Payment Successful")
 
@@ -90,7 +90,7 @@ const OrderScreen = () => {
         }
     }
 
-    return isLoading ? <Loader /> : error ? <Message variant="danger" /> : (
+    return isLoading ? <Loader /> : error ? <Message variant="danger">{error?.data?.message || error.error}</Message> : (
         <>
             <h1>Order {order._id}</h1>
             <Row>
@@ -149,7 +149,7 @@ const OrderScreen = () => {
                                             </Link>
                                         </Col>
                                         <Col md={4}>
-                                            {item.qty} x ${item.price} = ${item.qty * item.price}
+                                            {item.qty} x ₹{item.price} = ₹{item.qty * item.price}
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
@@ -170,7 +170,7 @@ const OrderScreen = () => {
                                         Items
                                     </Col>
                                     <Col>
-                                        ${order.itemsPrice}
+                                        ₹{order.itemsPrice}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -178,7 +178,7 @@ const OrderScreen = () => {
                                         Shipping
                                     </Col>
                                     <Col>
-                                        ${order.shippingPrice}
+                                        ₹{order.shippingPrice}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -186,7 +186,7 @@ const OrderScreen = () => {
                                         Tax
                                     </Col>
                                     <Col>
-                                        ${order.taxPrice}
+                                        ₹{order.taxPrice}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -194,7 +194,7 @@ const OrderScreen = () => {
                                         Total
                                     </Col>
                                     <Col>
-                                        ${order.totalPrice}
+                                        ₹{order.totalPrice}
                                     </Col>
                                 </Row>
                             </ListGroup.Item>

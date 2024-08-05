@@ -1,13 +1,14 @@
 import React from 'react'
 import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap"
-import { FaShoppingCart, faShoppingCart, FaUser } from "react-icons/fa"
+import { FaShoppingCart, FaUser } from "react-icons/fa"
 import logo from "../assets/logo.png"
 import { LinkContainer } from "react-router-bootstrap"
 import { useSelector, useDispatch } from 'react-redux'
 import { useLogoutMutation } from '../slices/usersApiSlice'
 import { logout } from "../slices/authSlice"
 import { useNavigate, Link } from 'react-router-dom'
-
+import SearchBox from './SearchBox'
+import { resetCart } from '../slices/cartSlice'
 
 
 const Header = () => {
@@ -24,11 +25,11 @@ const Header = () => {
 
             await logoutApiCall().unwrap()
             dispatch(logout())
+            dispatch(resetCart())
             navigate("/login")
         } catch (error) {
             console.log(error)
         }
-
     }
 
     return (
@@ -45,6 +46,7 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className='ms-auto'>
+                            <SearchBox />
                             <LinkContainer to="/cart">
                                 <Nav.Link>
                                     <FaShoppingCart /> Cart
