@@ -87,5 +87,6 @@ export async function verifyPayPalPayment(paypalTransactionId) {
   return {
     verified: paypalData.status === 'COMPLETED',
     value: paypalData.purchase_units[0].amount.value,
+    currency_code: paypalData.purchase_units[0].amount.currency_code,
   };
 }
