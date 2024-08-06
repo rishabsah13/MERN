@@ -28,7 +28,6 @@ const PlaceOrderScreen = () => {
   const placeOrderHandler = async () => {
     console.log("#### placeOrderHandler called");
     try {
-      const token = localStorage.getItem('token');
       const res = await createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
@@ -37,11 +36,6 @@ const PlaceOrderScreen = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-      },{
-        
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
       }).unwrap();
 
       console.log("#### Order Response:", res);
